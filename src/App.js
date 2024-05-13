@@ -1,13 +1,17 @@
 import './App.css';
 import React from 'react';
+import { createRef } from 'react';
+
 import Name from './name/Name';
+import List from './list/List';
 
 class App extends React.Component {
   constructor(props) {
     console.log("constructor");
     super(props);
     this.state = {input: ""};
-    console.log(this.state);  
+    this.inputRef = createRef();
+    console.log(this.inputRef);
 
     this.onChange = this.onChange.bind(this);
     this.handle = this.handle.bind(this);
@@ -29,6 +33,7 @@ class App extends React.Component {
 
   getSnapshotBeforeUpdate(prevProps, prevState) {
     console.log("getSnapshotBeforeUpdate");
+    return null;
   }
 
   componentDidUpdate() {
@@ -39,13 +44,25 @@ class App extends React.Component {
     console.log("willUnmount");
   }
   
+  focusInput = () => {
+    this.inputRef.current.focus();
+  }
+  
   render() {
     console.log("render");
-    return <form onSubmit={this.handle}>
-      <Name user={"Андрей"}/>
-      <input type="text" placeholder="Text for sending" value={this.state.name} onChange={this.onChange}/>
-      <button>Отправить</button>
-    </form>
+    return <div>
+      <div className="divForm">
+        <form onSubmit={this.handle}>
+        <Name user={"Андрей"}/>
+        <input ref={this.inputRef} type="text" placeholder="Text for sending" value={this.state.input} onChange={this.onChange}/>
+        <button id="buttonSend">Отправить</button>
+        </form>
+        <button onClick={this.focusInput}>Фокус</button>
+      </div>
+      <div>
+      <List/>
+      </div>
+    </div>
   }
 
   handle(e) {
@@ -55,6 +72,10 @@ class App extends React.Component {
 
   onChange(e) {
     this.setState({input: e.target.value});
+    const ch = document.getElementById("buttonSend");
+    if(e.target.value.includes('react')) {
+      ch.setAttribute("disabled", "");
+    } else ch.removeAttribute("disabled");
   }
 }
 
