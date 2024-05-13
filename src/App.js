@@ -15,6 +15,7 @@ class App extends React.Component {
 
     this.onChange = this.onChange.bind(this);
     this.handle = this.handle.bind(this);
+    this.focusInput = this.focusInput.bind(this);
   }
 
   static getDerivedStateFromProps(props, state) {
@@ -44,7 +45,7 @@ class App extends React.Component {
     console.log("willUnmount");
   }
   
-  focusInput = () => {
+  focusInput() {
     this.inputRef.current.focus();
   }
   
